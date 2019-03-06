@@ -2,6 +2,7 @@ import helperIVRKit as IVR
 import time
 import connectors
 import random
+import pytest
 from devconfig import setUpConfig
 
 data = setUpConfig()
@@ -42,7 +43,7 @@ def test_add_resource_to_customer():
 #     r = IVR.add_resource(data['login'], data['password'], params)
 #     assert r.status_code == 404
 
-
+@pytest.mark.xfail(run=False)
 def test_invalid_customer_Id():
     number = IVR.get_random_number_for_reserve()
     params = {
