@@ -2,7 +2,7 @@ import time
 import random
 import requests
 import helperIVRKit as IVR
-import Connectors
+import connectors
 from devconfig import setUpConfig
 
 data = setUpConfig()
@@ -25,13 +25,14 @@ def test_create_customer_with_valid_token():
     assert new_customer == response
 
     # Проверка наличия кастомера в Porta
-    r = Connectors.get_customer_info(response['name'])
+    r = connectors.get_customer_info(response['name'])
     assert r is not False
     assert new_customer['name'] == r['customer_info']['name']
 
     # Проверка наличия кастомера в базе CMAPI
-    r = IVR.search_record_postgres(response['name'])
-    assert response['name'] == r.name
+    r = connectors.search_record_postgres('SELECT * FROM customer_mgt.customer_mgt.customer WHERE name = %(name)s',
+                   {'name': new_customer['name']})
+    assert response['name'] == r[0][4]
 
 
 def test_create_customer_with_invalid_token():
@@ -49,13 +50,13 @@ def test_create_customer_with_invalid_token():
     assert r.status_code == 401
 
     # Проверка наличия кастомера в Porta
-    r = pC.getCustomerInfo(new_customer['name'])
+    r = connectors.get_customer_info(new_customer['name'])
     assert r == {}
 
     # Проверка наличия кастомера в базе CMAPI
-    r = IVR.search_record_postgres(new_customer['name'])
-    assert r is None
-
+    r = connectors.search_record_postgres('SELECT * FROM customer_mgt.customer_mgt.customer WHERE name = %(name)s',
+                   {'name': new_customer['name']})
+    assert r == []
 
 def test_create_customer_without_token():
     new_customer = {
@@ -73,9 +74,10 @@ def test_create_customer_without_token():
     assert r.status_code == 401
 
     # Проверка наличия кастомера в Porta
-    r = pC.getCustomerInfo(new_customer['name'])
+    r = connectors.get_customer_info(new_customer['name'])
     assert r == {}
 
     # Проверка наличия кастомера в базе CMAPI
-    r = IVR.search_record_postgres(new_customer['name'])
-    assert r is None
+    r = connectors.search_record_postgres('SELECT * FROM customer_mgt.customer_mgt.customer WHERE name = %(name)s',
+                   {'name': new_customer['name']})
+    assert r == []

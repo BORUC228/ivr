@@ -1,7 +1,7 @@
 import helperIVRKit as IVR
 import time
 from devconfig import setUpConfig
-from Connectors import get_number_info
+from connectors import get_number_info
 
 data = setUpConfig()
 
@@ -9,7 +9,7 @@ data = setUpConfig()
 def test_reserve_and_unreserving_correct_number():
     number = IVR.get_random_number_for_reserve()
     params = {
-        'number': number,
+        'number': str(number),
         'period': 600
     }
     r = IVR.reserve_number(data['login'], data['password'], params)
@@ -20,7 +20,7 @@ def test_reserve_and_unreserving_correct_number():
     r = get_number_info(number)
     assert r['result'][0]['state_name'] == "RESERVED"
     delete_params = {
-        'number': number,
+        'number': str(number),
         'reserved_uid': reserved_uid
     }
     r = IVR.delete_reserved_number(data['login'], data['password'], delete_params)
@@ -37,13 +37,13 @@ def test_reserve_broken_number():
             'period': 600
         },
         {
-            'number': number,
+            'number': str(number),
             'period': '700'
         },
     ],
     params_500 = [
         {
-            'number': number + '1',
+            'number': str(number) + '1',
             'period': 600
         },
 
