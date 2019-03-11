@@ -6,7 +6,7 @@ from connectors import get_number_info
 data = setUpConfig()
 
 
-def test_reserve_and_unreserving_correct_number():
+def test_reserve_and_unreserve_correct_number():
     number = IVR.get_random_number_for_reserve()
     params = {
         'number': str(number),
@@ -57,29 +57,6 @@ def test_reserve_broken_number():
     for param in params_500:
         r = IVR.reserve_number(data['login'], data['password'], param)
         assert r.status_code == 500
-
-
-''' 
- def test_unreserving_valid_number():
-    reserve_params = {
-        'number': IVR.get_random_number_for_reserve(),
-        'period': 500
-    }
-    r = IVR.reserve_number(data['login'], data['password'], reserve_params)
-    assert r.status_code == 201
-    response = r.json()
-    reserved_uid = response[0]['reserved_uid']
-    delete_params = {
-        'number': reserve_params['number'],
-        'reserved_uid': reserved_uid
-    }
-    r = IVR.delete_reserved_number(data['login'], data['password'], delete_params)
-    assert r.status_code == 204
-    r = get_number_info(reserve_params['number'])
-    assert r.status_code == 200
-    response = r.json()
-    assert response['result'][0]['state_name'] == "FREE"
-'''
 
 '''
 def test_check_period():

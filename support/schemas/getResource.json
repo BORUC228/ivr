@@ -2,130 +2,37 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "title": "Get resource schema",
-  "required": [
-    "id",
-    "href",
-    "name",
-    "description",
-    "type",
-    "state",
-    "relatedParty",
-    "resourceCharacteristic"
-  ],
   "properties": {
-    "id": {
-      "$id": "#/properties/id",
-      "type": "integer",
-      "title": "The resource Id",
-      "default": 0,
-      "examples": [
-        71
-      ]
-    },
-    "href": {
-      "$id": "#/properties/href",
-      "type": "string",
-      "title": "The Href Schema",
-      "default": "",
-      "examples": [
-        ""
-      ],
-      "pattern": "^(.*)$"
-    },
-    "name": {
-      "$id": "#/properties/name",
-      "type": "string",
-      "title": "resource",
-      "default": "",
-      "examples": [
-        "9999"
-      ],
-      "pattern": "^(.*)$"
-    },
-    "description": {
-      "$id": "#/properties/description",
-      "type": "string",
-      "title": "The Description Schema",
-      "default": "",
-      "examples": [
-        "askdjh"
-      ],
-      "pattern": "^(.*)$"
-    },
-    "type": {
-      "$id": "#/properties/type",
-      "type": "string",
-      "title": "type of resource",
-      "default": "number",
-      "examples": [
-        "number"
-      ],
-      "pattern": "[number]"
-    },
-    "state": {
-      "$id": "#/properties/state",
-      "type": "string",
-      "title": "The State Schema",
-      "default": "",
-      "examples": [
-        ""
-      ],
-      "pattern": "^(.*)$"
-    },
+    "id": {"type": "string"},
+    "href": {"type": "string"},
+    "name": {"type": "string"},
+    "description": {"type": "string"},
+    "type": {"type": "string"},
+    "state": {"type": "string"},
     "relatedParty": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "id",
-          "href",
-          "role",
-          "name",
-          "customerId"
-        ],
         "properties": {
-          "id": {
-            "type": "integer",
-            "default": 0
-          },
-          "href": {
-            "type": "string",
-            "pattern": "^(.*)$"
-          },
-          "role": {
-            "type": "string",
-            "pattern": "^(.*)$"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^(.*)$"
-          },
-          "customerId": {
-            "type": "integer"
-          }
+          "id": {"type": "string"},
+          "href": {"type": "string"},
+          "role": {"type": "string"},
+          "name": {"type": "string"},
+          "customerId": {"type": "number"}
         }
       }
     },
     "resourceCharacteristic": {
       "type": "array",
       "items": {
-        "$id": "#/properties/resourceCharacteristic/items",
         "type": "object",
-        "required": [
-          "name",
-          "value"
-        ],
         "properties": {
-          "name": {
-            "type": "string",
-            "pattern": "^(.*)$"
-          },
-          "value": {
-            "type": "string",
-            "pattern": "^(.*)$"
-          }
+          "name": {"type": "string"},
+          "value": {"type": "string"},
+          "nickname": {"type": "string"}
         }
-      }
+      },
+      "required": ["name","value","nickname"]
     }
   }
 }

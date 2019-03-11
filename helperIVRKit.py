@@ -1,5 +1,6 @@
 import requests
 import random
+import string
 from devconfig import setUpConfig
 
 data = setUpConfig()
@@ -47,12 +48,12 @@ def get_random_number_for_reserve():
                'Authorization': 'Bearer ' + bearer_token,
                'Range': 'numbers=1-10'}
     params = {
-            'category': 'REGULAR',
-            'owner': 'MTT',
-            'regionCode': 'MOW',
-            'type': 'ABC',
-            # 'mask': random.choice(mask)
-        }
+        'category': 'REGULAR',
+        'owner': 'MTT',
+        'regionCode': 'MOW',
+        'type': 'ABC',
+        # 'mask': random.choice(mask)
+    }
     r = get_numbers(headers=headers, params=params)
     assert r.status_code == 206
     response = r.json()
@@ -102,5 +103,17 @@ def get_customer_resource(login, password, id):
     headers = {'Content-Type': 'application/json',
                'Authorization': 'Bearer ' + bearer_token}
     base_url = data['ivr_url'] + '/customers/' + id + '/numbers'
+    r = requests.get(base_url, headers=headers)
+    return r
+
+
+def random_generator(size=6, chars=string.ascii_letters + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
+
+
+def get_customer_numbers(bearer_token, id):
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/customers/' + str(id) + '/numbers'
     r = requests.get(base_url, headers=headers)
     return r

@@ -40,6 +40,35 @@ def get_customer_info(customer_name):
     assert r.status_code == 200
     return r.json()
 
+
+def get_account_info(account):
+    api_hostname = '172.16.102.19:443'
+    api_user = 'EGoncharenko_126'
+    api_password = 'march9999'
+
+    # for self-signed certificates
+    urllib3.disable_warnings()
+
+    api_base = 'https://%s/rest/' % api_hostname
+
+    # login
+    req_data = {'params': json.dumps({'login': api_user, 'password':
+                api_password})}
+
+    r = requests.post(api_base + 'Session/login', data=req_data,
+                      verify=False)
+    data = r.json()
+    session_id = data['session_id']
+    print("Started session: %s" % session_id)
+
+    # get currency list
+    req_data = {'auth_info': json.dumps({'session_id': session_id}),
+                'params': json.dumps({'id': account})}
+    r = requests.post(api_base + 'Account/get_account_info',
+                      data=req_data, verify=False)
+    assert r.status_code == 200
+    return r.json()
+
 # NMS
 
 

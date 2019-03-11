@@ -55,8 +55,7 @@ def test_get_numbers_with_filter():
 
 def test_get_numbers_with_missing_start_range():
     bearer_token = IVR.take_token('Creep', 'Walk')
-    start = 1
-    end = 10
+    end = 15
     headers = {'Content-Type': 'application/json',
                'Authorization': 'Bearer ' + bearer_token,
                'Range': 'numbers=-' + str(end)}
@@ -73,7 +72,7 @@ def test_get_numbers_with_missing_start_range():
 
 def test_get_numbers_with_missing_end_range():
     bearer_token = IVR.take_token('Creep', 'Walk')
-    start = 1
+    start = 5
     headers = {'Content-Type': 'application/json',
                'Authorization': 'Bearer ' + bearer_token,
                'Range': 'numbers=' + str(start)}
@@ -92,6 +91,44 @@ def test_get_numbers_with_missing_end_range():
         response = r.json()
         if response != []:
             assert len(response) <= ((start +10) - (start - 1))
+            print(response)
+            for element in response:
+                assert element['owner'] == params['owner']
+                assert element['category'] == params['category']
+                assert element['regionCode'] == params['regionCode']
+                assert element['type'] == params['type']
+                assert element['state'] == 'FREE'
+            numbers_found = True
+            break
+        else:
+            print('Trying found: ' + params['category'] + ' ' + params['owner'] + ' ' + params['regionCode'] + ' ' +
+                  params['type'])
+            i += 1
+    assert numbers_found is True
+
+
+def s():
+    bearer_token = IVR.take_token('Creep', 'Walk')
+    start = 1
+    end = 10
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token,
+               'Range': 'numbers=' + str(start) + '-' + str(end)}
+    i = 0
+    numbers_found = False
+    while i < 50:
+        params = {
+            'category': random.choice(data['category']),
+            'owner': random.choice(data['owner']),
+            'regionCode': random.choice(data['regionCode']),
+            'type': random.choice(data['number_type']),
+            # 'mask': random.choice(mask)
+        }
+        r = IVR.get_numbers(headers=headers, params=params)
+        assert r.status_code == 206
+        response = r.json()
+        if response != []:
+            assert len(response) <= (end - (start - 1))
             print(response)
             for element in response:
                 assert element['owner'] == params['owner']
