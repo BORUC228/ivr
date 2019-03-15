@@ -117,3 +117,12 @@ def get_customer_numbers(bearer_token, id):
     base_url = data['ivr_url'] + '/customers/' + str(id) + '/numbers'
     r = requests.get(base_url, headers=headers)
     return r
+
+
+def delete_customer_numbers(login, password, customer_id, number_id):
+    bearer_token = take_token(login, password)
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/customers/' + str(customer_id) + '/numbers/' + str(number_id)
+    r = requests.delete(base_url, headers=headers)
+    return r
