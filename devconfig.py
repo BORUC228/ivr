@@ -1,7 +1,7 @@
 def setUpConfig():
     data = {
-        'login': 'Creep',
-        'password': 'Walk',
+        'login': 'borucTheTest',
+        'password': 'march9999',
         'bad_login': 'Kizaru',
         'ivr_url': 'http://172.16.102.95:8085/v1',
         'postgres': {
@@ -15,6 +15,8 @@ def setUpConfig():
         'regionCode': ['MOW'],
         'number_type': ['ABC'],
         'nms_url': 'http://172.16.122.30:8080/MTT.Reporter/webresources/API/json',
-        'porta_url': '172.16.102.19:443'
+        'porta_url': '172.16.102.19:443',
+        'customer_id': '10847',
+        'scenario_id': '321',
     }
     return data

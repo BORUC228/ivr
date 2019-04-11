@@ -1,7 +1,9 @@
 import requests
 import random
 import string
-from devconfig import setUpConfig
+# from devconfig import setUpConfig
+from ppconfig import setUpConfig
+
 
 data = setUpConfig()
 
@@ -37,7 +39,7 @@ def create_customer(token, params):
 
 
 def get_numbers(headers, params):
-    base_url = data['ivr_url'] + '/number'
+    base_url = data['ivr_url'] + '/numbers'
     r = requests.get(base_url, headers=headers, params=params)
     return r
 
@@ -89,11 +91,11 @@ def delete_reserved_number(login, password, params):
     return r
 
 
-def add_resource(login, password, params):
+def add_resource(login, password, customer_id, params):
     bearer_token = take_token(login, password)
     headers = {'Content-Type': 'application/json',
                'Authorization': 'Bearer ' + bearer_token}
-    base_url = data['ivr_url'] + '/numbers'
+    base_url = data['ivr_url'] + '/customers/'+customer_id+'/numbers'
     r = requests.post(base_url, headers=headers, json=params)
     return r
 
@@ -126,3 +128,70 @@ def delete_customer_numbers(login, password, customer_id, number_id):
     base_url = data['ivr_url'] + '/customers/' + str(customer_id) + '/numbers/' + str(number_id)
     r = requests.delete(base_url, headers=headers)
     return r
+
+
+def get_templates_scenario(bearer_token):
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/state-templates'
+    r = requests.get(base_url, headers=headers)
+    return r
+
+
+def create_scenario(bearer_token, customer_id, params):
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/customers/'+customer_id+'/scenarios'
+    r = requests.post(base_url, headers=headers, json=params)
+    return r
+
+
+def update_scenario(bearer_token, customer_id, scenario_id, params):
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/customers/' + customer_id + '/scenarios/' + scenario_id
+    r = requests.put(base_url, headers=headers, json=params)
+    return r
+
+
+def get_scenarios(bearer_token, customer_id):
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/customers/'+customer_id+'/scenarios'
+    r = requests.get(base_url, headers=headers)
+    return r
+
+
+def create_route(bearer_token, customer_id, params):
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/customers/'+customer_id+'/routes'
+    r = requests.post(base_url, headers=headers, json=params)
+    return r
+
+
+def get_routes(bearer_token, customer_id):
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/customers/'+customer_id+'/routes'
+    r = requests.get(base_url, headers=headers)
+    return r
+
+
+def get_voice_messages(bearer_token, customer_id):
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token}
+    base_url = data['ivr_url'] + '/customers/'+customer_id+'/voice_messages'
+    r = requests.get(base_url, headers=headers)
+    return r
+
+
+def get_ranges(url, range_value):
+    bearer_token = take_token(data['login'], data['password'])
+    headers = {'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + bearer_token,
+               'Range': str(range_value)
+               }
+    r = requests.get(url, headers=headers)
+    return r
+

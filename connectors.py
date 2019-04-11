@@ -15,7 +15,7 @@ data = setUpConfig()
 def get_customer_info(customer_name):
     api_hostname = '172.16.102.19:443'
     api_user = 'EGoncharenko_126'
-    api_password = 'march9999'
+    api_password = 'april9999'
 
     # for self-signed certificates
     urllib3.disable_warnings()

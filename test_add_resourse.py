@@ -18,155 +18,132 @@ def test_add_resource_to_customer():
                                               {'status': 'active'})
     random_record = random.choice(query)
     id = random_record[0]
-    customer_name = random_record[1]
+    # customer_name = random_record[1]
     params = {
         "orderName": random_generator(255),
         "orderDescription": random_generator(255),
-        "customerId": str(id),
         "orderItemNumber": random_generator(128),
         "orderItemDescription": IVR.random_generator(255)
     }
 
-    r = IVR.add_resource(data['login'], data['password'], params)
+    r = IVR.add_resource(data['login'], data['password'], id, params)
     assert r.status_code == 201
     if r.status_code == 500:
         response = r.json()
         print(response['message'])
     response = r.json()
-    assert params == response
-
+    assert response['id']
+    assert params['orderName'] == response['orderName']
+    assert params['orderDescription'] == response['orderDescription']
+    assert params['orderItemNumber'] == response['orderItemNumber']
+    assert params['orderItemDescription'] == response['orderItemDescription']
     # Проверка того, что ресурс добавился в Porta
-    r = connectors.get_account_info(str(number))
-    assert r['account_info']['customer_name'] == customer_name
+    # r = connectors.get_account_info(str(number))
+    # assert r['account_info']['customer_name'] == customer_name
     # Проверка того, что ресурс добавился в ResourceMGTAPI
-    query = connectors.search_record_postgres(
-        'SELECT billing_id FROM customer_mgt.resource_management.resource_number WHERE dialed_number = %(number)s',
-        {'number': str(number)})
-    random_record = random.choice(query)
-    billing_id = random_record[0]
+    # query = connectors.search_record_postgres(
+    #     'SELECT billing_id FROM customer_mgt.resource_management.resource_number WHERE dialed_number = %(number)s',
+    #     {'number': str(number)})
+    # random_record = random.choice(query)
+    # billing_id = random_record[0]
 
 
-@pytest.mark.xfail(run=False)
-def test_invalid_customer_Id():
+# @pytest.mark.xfail(run=False)
+def test_invalid_customer_id():
     number = IVR.get_random_number_for_reserve()
+    id = 'dsm'
     params = {
         "orderName": "trewt",
         "orderDescription": "sad",
-        "customerId": "122ds2321",
         "orderItemNumber": str(number),
         "orderItemDescription": "wrongbuy"
     }
-    r = IVR.add_resource(data['login'], data['password'], params)
+    r = IVR.add_resource(data['login'], data['password'], id, params)
     assert r.status_code == 400
 
 
-@pytest.mark.xfail(run=False)
 def test_missing_required_params():
     number = IVR.get_random_number_for_reserve()
+    id = '10777'
     params = [
         {
             "orderName": "",
-            "customerId": "4wres587564sd",
             "orderItemNumber": str(number),
-            "orderItemDescription": "wrongbuy"
         },
         {
             "orderName": "vsa",
-            "customerId": "",
-            "orderItemNumber": str(number),
-            "orderItemDescription": "wrongbuy"
-        },
-        {
-            "orderName": "vsa",
-            "customerId": "10774",
             "orderItemNumber": "",
-            "orderItemDescription": "wrongbuy"
-        },
-        {
-            "orderName": "vsa",
-            "customerId": "10774",
-            "orderItemNumber": str(number),
-            "orderItemDescription": ""
         }
     ]
     for case in params:
-        r = IVR.add_resource(data['login'], data['password'], case)
+        r = IVR.add_resource(data['login'], data['password'], id, case)
         assert r.status_code == 400
 
 
 def test_unique_params():
     number = IVR.get_random_number_for_reserve()
+    id = '10777'
     params = {
         "orderName": "zakzak",
-        "customerId": "10774",
-        "orderItemNumber": str(number) + '111',
-        "orderItemDescription": "wrongbuy"
+        "orderItemNumber": str(number) + '111'
     }
-    r = IVR.add_resource(data['login'], data['password'], params)
+    r = IVR.add_resource(data['login'], data['password'], id, params)
     assert r.status_code == 201
-    r = IVR.add_resource(data['login'], data['password'], params)
-    assert r.status_code == 500
+    r = IVR.add_resource(data['login'], data['password'], id, params)
+    assert r.status_code == 400
 
 
 def test_wrong_type_params():
     number = IVR.get_random_number_for_reserve()
+    id = '10777'
     params = [
         {
             "orderName": 900,
-            "customerId": "10774",
             "orderItemNumber": str(number),
             "orderItemDescription": "wrongbuy"
-        },        {
+        },
+        {
             "orderName": "dsad",
-            "customerId": 10774,
-            "orderItemNumber": str(number),
-            "orderItemDescription": "wrongbuy"
-        },        {
-            "orderName": "dsad",
-            "customerId": "10774",
             "orderItemNumber": int(number),
             "orderItemDescription": "wrongbuy"
-        },        {
+        },
+        {
             "orderName": "dsad",
-            "customerId": "10774",
             "orderItemNumber": str(number),
             "orderItemDescription": 770
         }
     ]
     for case in params:
-        r = IVR.add_resource(data['login'], data['password'], case)
+        r = IVR.add_resource(data['login'], data['password'], id, case)
         assert r.status_code == 400
 
 
 def test_restricted_params():
     number = IVR.get_random_number_for_reserve()
+    id = '10777'
     params = [
         {
             "orderName": random_generator(256),
             "orderDescription": "sad",
-            "customerId": "10774",
             "orderItemNumber": str(number),
             "orderItemDescription": "wrongbuy"
         },        {
             "orderName": random_generator(255),
             "orderDescription": random_generator(256),
-            "customerId": "10774",
             "orderItemNumber": str(number),
             "orderItemDescription": "wrongbuy"
         },        {
             "orderName": random_generator(100),
             "orderDescription": "ssad",
-            "customerId": "10774",
             "orderItemNumber": random_generator(129),
             "orderItemDescription": "wrongbuy"
         },        {
             "orderName": random_generator(100),
             "orderDescription": "sad",
-            "customerId": "10774",
             "orderItemNumber": str(number),
             "orderItemDescription": random_generator(256)
         }
     ]
     for case in params:
-        r = IVR.add_resource(data['login'], data['password'], case)
+        r = IVR.add_resource(data['login'], data['password'], id, case)
         assert r.status_code == 400

@@ -12,14 +12,19 @@ def test_get_existing_customers():
                'Authorization': 'Bearer ' + bearer_token}
     base_url = data['ivr_url'] + '/customers'
     r = requests.get(base_url, headers=headers)
-    assert r.status_code == 200
+    assert r.status_code == 206
     response = r.json()
-    id = response[0]['id']
+    id = response[-1]['id']
 
     # Проверка наличия кастомера в базе CMAPI
     r = connectors.search_record_postgres('SELECT * FROM customer_mgt.customer_mgt.customer WHERE id = %(id)s',
                                           {'id': id})
     assert r != []
+    base_url = data['ivr_url'] + '/customers?id=510'
+    r = requests.get(base_url, headers=headers)
+    assert r.status_code == 206
+    response = r.json()
+    assert len(response) == 1
 
 
 def test_get_not_existing_customer():
@@ -28,10 +33,12 @@ def test_get_not_existing_customer():
                'Authorization': 'Bearer ' + bearer_token}
     base_url = data['ivr_url'] + '/customers?id=9999999'
     r = requests.get(base_url, headers=headers)
-    assert r.status_code == 500
+    assert r.status_code == 404
     id = '999999'
 
     # Проверка наличия кастомера в базе CMAPI
     r = connectors.search_record_postgres('SELECT * FROM customer_mgt.customer_mgt.customer WHERE id = %(id)s',
                                           {'id': id})
     assert r == []
+
+
