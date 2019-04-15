@@ -1,11 +1,10 @@
 import requests
-# from devconfig import setUpConfig
-from ppconfig import setUpConfig
+from devconfig import setUpConfig
+
 
 data = setUpConfig()
 
 
-# valid auth - 200
 def test_take_token_with_valid_auth():
     base_url = data['ivr_url'] + '/token'
     headers = {'Content-Type': 'application/json'}

@@ -1,20 +1,10 @@
 import requests
 import random
 import string
-# from devconfig import setUpConfig
-from ppconfig import setUpConfig
+from devconfig import setUpConfig
 
 
 data = setUpConfig()
-
-
-# def set_env(cmdopt):
-#     if cmdopt == 'env':
-#         data = setUpConfig()
-#     elif cmdopt == 'pp':
-#         data =setUpConfig()
-#     elif cmdopt == 'pp':
-#         data = setUpConfig()
 
 
 def take_token(login, password):
