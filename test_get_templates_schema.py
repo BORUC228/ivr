@@ -4,10 +4,11 @@ import connectors
 from devconfig import setUpConfig
 
 data = setUpConfig()
-scenarios_types = ['VoiceState', 'HttpState', 'OutgoingCallState', 'SqlState', 'RouteState']
+scenarios_types = ['VoiceState', 'HttpState', 'OutgoingCallState', 'SqlState', 'RouteState', 'ReleaseCallState',
+                   'ScriptState', 'CallBackState', 'HttpWaitRequestState', 'HttpResponseState', 'CgPN_FilterState',
+                   'ScheduleFilterState']
 
 
-# valid create - 200
 def test_get_all_scenarios_templates():
     bearer_token = IVR.take_token(data['login'], data['password'])
     r = IVR.get_templates_scenario(bearer_token)

@@ -1,4 +1,5 @@
 import helperIVRKit as IVR
+import pprint
 from devconfig import setUpConfig
 
 
@@ -7,9 +8,10 @@ customer_id = data['customer_id']
 
 
 def test_range():
-    function_with_range = ['get_customer_scenarios', 'get_customers', 'get_customer_numbers', 'get_customer_routes',
-                           'get_customer_voice_messages']
-    for function in function_with_range:
+    # functions_with_range = ['get_customer_scenarios', 'get_customers', 'get_customer_numbers', 'get_customer_routes',
+    #                        'get_customer_voice_messages']
+    functions_with_range = ['get_customers', 'get_customer_numbers']
+    for function in functions_with_range:
         base_url = ''
         if function == 'get_customers':
             base_url = data['ivr_url'] + '/customers'
@@ -31,6 +33,7 @@ def test_range():
                   range_unit+'=1-l',
                   range_unit+'s=0-99']
         r = IVR.get_ranges(base_url, ranges[0])
+        pprint.pprint(r)
         assert r.status_code == 416
         r = IVR.get_ranges(base_url, ranges[1])
         assert r.status_code == 206
@@ -39,6 +42,7 @@ def test_range():
         r = IVR.get_ranges(base_url, ranges[2])
         assert r.status_code == 206
         response = r.json()
+        pprint.pprint(response)
         assert 0 <= len(response) <= 1
         r = IVR.get_ranges(base_url, ranges[3])
         assert r.status_code == 206

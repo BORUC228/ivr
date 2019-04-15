@@ -1,5 +1,4 @@
 import helperIVRKit as IVR
-import pprint
 from devconfig import setUpConfig
 from helperIVRKit import random_generator
 
@@ -15,12 +14,11 @@ def test_delete_resource_to_customer():
         "orderItemNumber": random_generator(128),
         "orderItemDescription": random_generator(255)
     }
-    pprint.pprint(params)
     r = IVR.add_resource(data['login'], data['password'], customer_id, params)
     assert r.status_code == 201
     bearer_token = IVR.take_token(data['login'], data['password'])
     r = IVR.get_customer_numbers(bearer_token, customer_id)
-    assert r.status_code == 200
+    assert r.status_code == 206
     response = r.json()
     id_number = 0
     for number in response:

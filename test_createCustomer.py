@@ -3,8 +3,7 @@ import random
 import requests
 import helperIVRKit as IVR
 import connectors
-# from devconfig import setUpConfig
-from ppconfig import setUpConfig
+from devconfig import setUpConfig
 from helperIVRKit import random_generator
 
 data = setUpConfig()

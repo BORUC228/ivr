@@ -146,6 +146,7 @@ def update_scenario(bearer_token, customer_id, scenario_id, params):
 
 def get_scenarios(bearer_token, customer_id):
     headers = {'Content-Type': 'application/json',
+               'Range':'scenarion=0-99',
                'Authorization': 'Bearer ' + bearer_token}
     base_url = data['ivr_url'] + '/customers/'+customer_id+'/scenarios'
     r = requests.get(base_url, headers=headers)

@@ -1,6 +1,4 @@
-import requests
 import helperIVRKit as IVR
-import connectors
 from devconfig import setUpConfig
 
 
