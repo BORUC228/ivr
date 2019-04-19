@@ -1,13 +1,15 @@
-import helperIVRKit as IVR
-from devconfig import setUpConfig
-from helperIVRKit import random_generator
+from tests import helperIVRKit as IVR
+from tests.devconfig import setUpConfig
+import pytest
 
 data = setUpConfig()
 bearer_token = IVR.take_token(data['login'], data['password'])
-number_id = 102
-scenario_id = 100
+number_id = 425
+scenario_id = 248
 
 
+@pytest.mark.xfail
+# Необходимо в тесте генерить новый номер и сценарий и связывать (возможно только после реализации удаления данных)
 def test_create_route():
     # Получить список номеров, получить список сценариев, запросить  занятные роуты, которые уже созданы
     params = {
@@ -58,7 +60,8 @@ def test_missing_required_params():
         r = IVR.create_route(bearer_token, data['customer_id'], case)
         assert r.status_code == 400
 
-
+@pytest.mark.xfail
+# Необходимо в тесте генерить новый номер и сценарий и связывать (возможно только после реализации удаления данных)
 def test_unique_params():
     params = {
         "access_number": {
@@ -94,7 +97,7 @@ def test_wrong_type_params():
         }
     ]
     for case in params:
-        r = IVR.create_route(bearer_token, data['customer_id'], params)
+        r = IVR.create_route(bearer_token, data['customer_id'], case)
         assert r.status_code == 400
 
 
@@ -118,9 +121,18 @@ def test_restricted_params():
         }
     ]
     for case in params:
-        r = IVR.add_resource(data['login'], data['password'], id, case)
+        r = IVR.create_route(bearer_token, data['customer_id'], case)
         assert r.status_code == 400
 
 
-#def test_forbidden_params():
-    # Сделать запрос под одним кастомером, под вторым кастомер, сохранить айдишники ресурсов, кросс запросы
+def test_forbidden_params():
+    params = {
+        "access_number": {
+            "id": number_id
+        },
+        "destination_scenario": {
+            "id": scenario_id
+        },
+    }
+    r = IVR.create_route(bearer_token, '10747', params)
+    assert r.status_code == 403

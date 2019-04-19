@@ -1,7 +1,7 @@
 import requests
 import random
 import string
-from devconfig import setUpConfig
+from tests.devconfig import setUpConfig
 
 
 data = setUpConfig()
@@ -103,10 +103,10 @@ def random_generator(size=6, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
-def get_customer_numbers(bearer_token, id):
+def get_customer_numbers(bearer_token, customer_id):
     headers = {'Content-Type': 'application/json',
                'Authorization': 'Bearer ' + bearer_token}
-    base_url = data['ivr_url'] + '/customers/' + str(id) + '/numbers'
+    base_url = data['ivr_url'] + '/customers/'+customer_id+'/numbers'
     r = requests.get(base_url, headers=headers)
     return r
 
@@ -115,7 +115,7 @@ def delete_customer_numbers(login, password, customer_id, number_id):
     bearer_token = take_token(login, password)
     headers = {'Content-Type': 'application/json',
                'Authorization': 'Bearer ' + bearer_token}
-    base_url = data['ivr_url'] + '/customers/' + str(customer_id) + '/numbers/' + str(number_id)
+    base_url = data['ivr_url'] + '/customers/'+customer_id+'/numbers/' + str(number_id)
     r = requests.delete(base_url, headers=headers)
     return r
 
@@ -171,7 +171,8 @@ def get_routes(bearer_token, customer_id):
 
 def get_voice_messages(bearer_token, customer_id):
     headers = {'Content-Type': 'application/json',
-               'Authorization': 'Bearer ' + bearer_token}
+               'Authorization': 'Bearer ' + bearer_token,
+               'Range': 'voice_messages=0-99'}
     base_url = data['ivr_url'] + '/customers/'+customer_id+'/voice_messages'
     r = requests.get(base_url, headers=headers)
     return r
@@ -185,4 +186,5 @@ def get_ranges(url, range_value):
                }
     r = requests.get(url, headers=headers)
     return r
+
 

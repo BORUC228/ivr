@@ -1,7 +1,8 @@
-import helperIVRKit as IVR
 import time
-from devconfig import setUpConfig
-from connectors import get_number_info
+import pytest
+from tests import helperIVRKit as IVR
+from tests.devconfig import setUpConfig
+from tests.connectors import get_number_info
 
 data = setUpConfig()
 
@@ -58,7 +59,8 @@ def test_reserve_broken_number():
         r = IVR.reserve_number(data['login'], data['password'], param)
         assert r.status_code == 500
 
-'''
+
+@pytest.mark.skip(reason='not available from NMS')
 def test_check_period():
     number = IVR.get_random_number_for_reserve()
     params = {
@@ -75,4 +77,3 @@ def test_check_period():
     time.sleep(params['period'])
     r = get_number_info(number)
     assert r['result'][0]['state_name'] == "FREE"
-'''

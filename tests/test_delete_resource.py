@@ -1,6 +1,6 @@
-import helperIVRKit as IVR
-from devconfig import setUpConfig
-from helperIVRKit import random_generator
+from tests import helperIVRKit as IVR
+from tests.devconfig import setUpConfig
+from tests.helperIVRKit import random_generator
 
 data = setUpConfig()
 customer_id = '10777'

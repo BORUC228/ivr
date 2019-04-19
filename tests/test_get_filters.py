@@ -1,5 +1,5 @@
-import helperIVRKit as IVR
-from devconfig import setUpConfig
+from tests import helperIVRKit as IVR
+from tests.devconfig import setUpConfig
 
 data = setUpConfig()
 

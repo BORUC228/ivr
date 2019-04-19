@@ -1,6 +1,6 @@
-import helperIVRKit as IVR
+from tests import helperIVRKit as IVR
 import random
-from devconfig import setUpConfig
+from tests.devconfig import setUpConfig
 
 # category = ['REGULAR', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'EXCLUSIVE']
 # regionCode = ['RU', 'MOW', 'SPE', 'NIZ', 'TA', 'CHE', 'KGD', 'SVE', 'KDA', 'KYA', 'NVS', 'PER', 'ROS', 'SAM', 'TYU',

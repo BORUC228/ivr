@@ -1,10 +1,12 @@
 import requests
-from devconfig import setUpConfig
+import pytest
+from tests.devconfig import setUpConfig
 
 
 data = setUpConfig()
 
 
+@pytest.mark.token
 def test_take_token_with_valid_auth():
     base_url = data['ivr_url'] + '/token'
     headers = {'Content-Type': 'application/json'}
@@ -19,7 +21,7 @@ def test_take_token_with_valid_auth():
     assert response['token'] != ''
 
 
-# invalid auth, missing password, missing login, missing login and password  - 401
+@pytest.mark.token
 def test_take_token_with_invalid_auth():
     base_url = data['ivr_url'] + '/token'
     headers = {'Content-Type': 'application/json'}

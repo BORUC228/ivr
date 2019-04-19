@@ -3,7 +3,7 @@ import json
 import urllib3
 import psycopg2
 import psycopg2.extras
-from devconfig import setUpConfig
+from tests.devconfig import setUpConfig
 
 
 

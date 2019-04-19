@@ -1,7 +1,6 @@
 import requests
-import helperIVRKit as IVR
-import connectors
-from devconfig import setUpConfig
+from tests import helperIVRKit as IVR
+from tests.devconfig import setUpConfig
 
 data = setUpConfig()
 scenarios_types = ['VoiceState', 'HttpState', 'OutgoingCallState', 'SqlState', 'RouteState', 'ReleaseCallState',

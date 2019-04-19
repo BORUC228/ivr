@@ -1,10 +1,9 @@
 import time
 import random
 import requests
-import helperIVRKit as IVR
-import connectors
-from devconfig import setUpConfig
-from helperIVRKit import random_generator
+from tests import connectors, helperIVRKit as IVR
+from tests.devconfig import setUpConfig
+from tests.helperIVRKit import random_generator
 
 data = setUpConfig()
 
@@ -69,7 +68,7 @@ def test_create_customer_with_required_params_only():
     assert new_customer['name'] == r['customer_info']['name']
     # Проверка наличия кастомера в базе CMAPI
     r = connectors.search_record_postgres('SELECT * FROM customer_mgt.customer_mgt.customer WHERE name = %(name)s',
-                   {'name': new_customer['name']})
+                                          {'name': new_customer['name']})
     assert response['name'] == r[0][4]
 
 
@@ -94,7 +93,7 @@ def test_create_customer_with_invalid_token():
 
     # Проверка наличия кастомера в базе CMAPI
     r = connectors.search_record_postgres('SELECT * FROM customer_mgt.customer_mgt.customer WHERE name = %(name)s',
-                   {'name': new_customer['name']})
+                                          {'name': new_customer['name']})
     assert r == []
 
 

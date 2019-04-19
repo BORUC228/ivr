@@ -1,14 +1,14 @@
-import helperIVRKit as IVR
-import connectors
+from tests import connectors, helperIVRKit as IVR
 import random
 import pytest
-from devconfig import setUpConfig
-from helperIVRKit import random_generator
+from tests.devconfig import setUpConfig
+from tests.helperIVRKit import random_generator
 
 data = setUpConfig()
 
 
-# Может падать, так как некоторые номера могут быть уже в порта из NMS
+@pytest.mark.xfail
+# После нормальной интеграции с nms - дописать
 def test_add_resource_to_customer():
     number = IVR.get_random_number_for_reserve()
     query = connectors.search_record_postgres('SELECT cmgtc.id,cmgtc.name from customer_mgt.customer as cmgtc '
@@ -48,7 +48,6 @@ def test_add_resource_to_customer():
     # billing_id = random_record[0]
 
 
-# @pytest.mark.xfail(run=False)
 def test_invalid_customer_id():
     number = IVR.get_random_number_for_reserve()
     id = 'dsm'
@@ -82,15 +81,15 @@ def test_missing_required_params():
 
 def test_unique_params():
     number = IVR.get_random_number_for_reserve()
-    id = '10777'
+    id = data['customer_id']
     params = {
         "orderName": "zakzak",
-        "orderItemNumber": str(number) + '111'
+        "orderItemNumber": str(number) + random_generator(5)
     }
     r = IVR.add_resource(data['login'], data['password'], id, params)
     assert r.status_code == 201
     r = IVR.add_resource(data['login'], data['password'], id, params)
-    assert r.status_code == 400
+    assert r.status_code == 409
 
 
 def test_wrong_type_params():
